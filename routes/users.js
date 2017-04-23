@@ -72,6 +72,31 @@ router.post('/delete/:id', function (req, res) {
     res.redirect('/');
 });
 
+/******MODIFICAR USUARIO*********/
+
+router.post('/update/:id', function (req, res) {
+
+    var cifrado = bcrypt.hashSync(req.body.password, null, null);
+
+    var userId = req.params.id;
+    var usuario = {};
+    usuario.usuario = req.body.usuario;
+    usuario.nombre = req.body.nombre;
+    usuario.password = cifrado;
+
+    var modificado_usuario = { usuario: usuario.usuario, password: usuario.password, nombre: usuario.nombre };
+
+    //connection.query('UPDATE usuario SET usuario=' + usuario.usuario + ',password=' + usuario.password + ', nombre=' + usuario.nombre, function (err, success) {
+    connection.query('UPDATE usuario SET ? where id=' + userId, modificado_usuario, function (err, success) {
+        
+        if (err) throw err;
+        console.log("Registro modificado: " + userId);
+        console.log(success);
+
+
+    });
+})
+
 
 
 
